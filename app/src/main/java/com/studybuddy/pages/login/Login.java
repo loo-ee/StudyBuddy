@@ -23,7 +23,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void loginOrRegister(View v) {
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.loading);
+        final ProgressBar progressBar = findViewById(R.id.loading);
         @SuppressLint("ShowToast") final Toast toast = Toast.makeText(this, "Redirecting...", Toast.LENGTH_LONG);
 
         toast.show();
