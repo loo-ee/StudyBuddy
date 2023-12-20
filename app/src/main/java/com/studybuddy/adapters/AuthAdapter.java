@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -21,11 +22,12 @@ import com.studybuddy.models.auth.Token;
 import com.studybuddy.pages.HomePage;
 import com.studybuddy.storage.StorageHandler;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 public class AuthAdapter {
 
@@ -43,17 +45,37 @@ public class AuthAdapter {
                 RequestFuture<JSONObject> future = RequestFuture.newFuture();
                 JsonObjectRequest request =
                         new JsonObjectRequest(Request.Method.POST, ServerData.serverURI + "/auth/token/", new JSONObject(body), future, error -> {
-                            @SuppressLint("ShowToast") Toast failedToast = Toast.makeText(context, "Account not found", Toast.LENGTH_LONG);
                             ProgressBar progressBar = ((Activity) context).findViewById(R.id.loading);
+                            String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
 
-                            failedToast.show();
-                            progressBar.setVisibility(View.GONE);
+                            try {
+                                JSONObject data = new JSONObject(responseBody);
+                                String message = data.optString("detail");
+                                @SuppressLint("ShowToast") Toast failedToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+
+                                failedToast.show();
+                                progressBar.setVisibility(View.GONE);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
                         } ) {
                             @Override
                             protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
                                 if (response.statusCode == 200) {
                                     Intent homePageIntent = new Intent(context, HomePage.class);
-                                    context.startActivity(homePageIntent);
+                                    String responseBody = new String(response.data, StandardCharsets.UTF_8);
+
+                                    try {
+                                        JSONObject responseData = new JSONObject(responseBody);
+                                        Token token = mapper.readValue(responseData.toString(), Token.class);
+                                        String[] data = {token.getAccess(), token.getRefresh()};
+                                        StorageHandler.writeToFile(context, data, "auth");
+                                        Log.d("testing", token.getAccess());
+                                        context.startActivity(homePageIntent);
+                                    } catch (JSONException | IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+
                                 }
 
                                 return super.parseNetworkResponse(response);
@@ -61,15 +83,6 @@ public class AuthAdapter {
                         };
 
                 requestQueue.add(request);
-
-                try {
-                    JSONObject response = future.get();
-                    Token token = mapper.readValue(response.toString(), Token.class);
-                    String[] data = {token.getAccess(), token.getRefresh()};
-                    StorageHandler.writeToFile(context, data, "auth");
-                } catch (InterruptedException | ExecutionException | IOException e) {
-                    throw new RuntimeException(e);
-                }
             }
         }).start();
     }
