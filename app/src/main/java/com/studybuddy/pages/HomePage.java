@@ -1,8 +1,10 @@
-package com.studybuddy;
+package com.studybuddy.pages;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.studybuddy.R;
 
 public class HomePage extends AppCompatActivity {
 

@@ -1,16 +1,16 @@
-package com.studybuddy.login;
+package com.studybuddy.pages.login;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.studybuddy.HomePage;
+import com.studybuddy.adapters.UnirestConfig;
+import com.studybuddy.pages.HomePage;
 import com.studybuddy.R;
 
 public class Login extends AppCompatActivity {
@@ -20,6 +20,8 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTitle("Login");
+
+        UnirestConfig.init();
     }
 
     public void loginOrRegister(View v) {
