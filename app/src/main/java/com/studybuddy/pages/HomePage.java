@@ -1,6 +1,7 @@
 package com.studybuddy.pages;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.os.Bundle;
 
@@ -13,7 +14,5 @@ public class HomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-        RegisterFragment r = new RegisterFragment();
-        r.show(getSupportFragmentManager(), "Show Dialog");
     }
 }

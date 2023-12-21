@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studybuddy.R;
 import com.studybuddy.models.auth.Token;
 import com.studybuddy.pages.HomePage;
+import com.studybuddy.pages.login.RegisterFragment;
 import com.studybuddy.storage.StorageHandler;
 
 import org.json.JSONException;
@@ -104,6 +107,11 @@ public class AuthAdapter {
 
                                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                                 Log.d("validate-email", "from validate error" + error.networkResponse.statusCode);
+
+                                AppCompatActivity activity = (AppCompatActivity) context;
+                                RegisterFragment r = new RegisterFragment();
+
+                                r.show(activity.getSupportFragmentManager(), "Show Dialog");
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }

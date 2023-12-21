@@ -1,6 +1,7 @@
 package com.studybuddy.pages.login;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.studybuddy.R;
 import com.studybuddy.adapters.AuthAdapter;
+import com.studybuddy.pages.HomePage;
 
 public class Login extends AppCompatActivity {
     @Override
