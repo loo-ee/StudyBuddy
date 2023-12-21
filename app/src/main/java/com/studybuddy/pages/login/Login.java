@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 public class Login extends AppCompatActivity {
+    private String email;
+    private String password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,16 +46,18 @@ public class Login extends AppCompatActivity {
     public void loginOrRegister(View v) {
         final ProgressBar progressBar = findViewById(R.id.loading);
         @SuppressLint("ShowToast") final Toast waitingToast = Toast.makeText(this, "Redirecting...", Toast.LENGTH_SHORT);
+        EditText emailField = findViewById(R.id.email);
+        EditText passwordField = findViewById(R.id.password);
 
-        TextView email = findViewById(R.id.email);
-        TextView password = findViewById(R.id.password);
-        login(this, email.getText().toString(), password.getText().toString());
+        this.email = emailField.getText().toString();
+        this.password = passwordField.getText().toString();
 
         waitingToast.show();
         progressBar.setVisibility(View.VISIBLE);
+        login(this);
     }
 
-    public void login(Context context, String email, String password) {
+    public void login(Context context) {
         ObjectMapper mapper = new ObjectMapper();
 
         new Thread(() -> {
@@ -71,7 +77,7 @@ public class Login extends AppCompatActivity {
                                     error -> {
                                         ProgressBar progressBar = ((Activity) context).findViewById(R.id.loading);
                                         progressBar.setVisibility(View.GONE);
-                                        validateEmail(context, email);
+                                        validateEmail(context);
                                         Log.d("validate-email", String.valueOf(error.networkResponse.statusCode));
                                     }
                             ) {
@@ -101,7 +107,7 @@ public class Login extends AppCompatActivity {
         }).start();
     }
 
-    public void validateEmail(Context context, String email) {
+    public void validateEmail(Context context) {
         new Thread(() -> {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
             RequestFuture<JSONObject> future = RequestFuture.newFuture();
@@ -122,10 +128,14 @@ public class Login extends AppCompatActivity {
                                             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                                             Log.d("validate-email", "from validate error" + error.networkResponse.statusCode);
 
-                                            AppCompatActivity activity = (AppCompatActivity) context;
-                                            NewAccountPromptFragment n = new NewAccountPromptFragment(email, activity);
+                                            NewAccountPromptFragment n = new NewAccountPromptFragment();
+                                            Bundle bundle = new Bundle();
 
-                                            n.show(activity.getSupportFragmentManager(), "Show Dialog");
+                                            bundle.putString("email", email);
+                                            bundle.putString("password", password);
+
+                                            n.setArguments(bundle);
+                                            n.show(getSupportFragmentManager(), "Show Dialog");
                                         } catch (JSONException e) {
                                             throw new RuntimeException(e);
                                         }
