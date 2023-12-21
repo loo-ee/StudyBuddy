@@ -123,9 +123,9 @@ public class Login extends AppCompatActivity {
                                             Log.d("validate-email", "from validate error" + error.networkResponse.statusCode);
 
                                             AppCompatActivity activity = (AppCompatActivity) context;
-                                            RegisterFragment r = new RegisterFragment();
+                                            NewAccountPromptFragment n = new NewAccountPromptFragment(email, activity);
 
-                                            r.show(activity.getSupportFragmentManager(), "Show Dialog");
+                                            n.show(activity.getSupportFragmentManager(), "Show Dialog");
                                         } catch (JSONException e) {
                                             throw new RuntimeException(e);
                                         }

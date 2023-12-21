@@ -14,7 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="DialogStyle" parent="Theme.AppCompat.Dialog.Alert">
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:colorBackgroundFloating">@color/cambridge_dark</item>
         <item name="android:gravity">start</item>
     </style>
