@@ -1,9 +1,9 @@
 package com.studybuddy.adapters;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -44,21 +44,19 @@ public class AuthAdapter {
                 RequestQueue requestQueue = Volley.newRequestQueue(context);
                 RequestFuture<JSONObject> future = RequestFuture.newFuture();
                 JsonObjectRequest request =
-                        new JsonObjectRequest(Request.Method.POST, ServerData.serverURI + "/auth/token/", new JSONObject(body), future, error -> {
-                            ProgressBar progressBar = ((Activity) context).findViewById(R.id.loading);
-                            String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-
-                            try {
-                                JSONObject data = new JSONObject(responseBody);
-                                String message = data.optString("detail");
-                                @SuppressLint("ShowToast") Toast failedToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-
-                                failedToast.show();
+                        new JsonObjectRequest
+                        (
+                            Request.Method.POST,
+                            ServerData.serverURI + "/auth/token/",
+                            new JSONObject(body),
+                            future,
+                            error -> {
+                                ProgressBar progressBar = ((Activity) context).findViewById(R.id.loading);
                                 progressBar.setVisibility(View.GONE);
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
+                                AuthAdapter.validateEmail(context, email);
+                                Log.d("validate-email", String.valueOf(error.networkResponse.statusCode));
                             }
-                        } ) {
+                        ) {
                             @Override
                             protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
                                 if (response.statusCode == 200) {
@@ -70,7 +68,6 @@ public class AuthAdapter {
                                         Token token = mapper.readValue(responseData.toString(), Token.class);
                                         String[] data = {token.getAccess(), token.getRefresh()};
                                         StorageHandler.writeToFile(context, data, "auth");
-                                        Log.d("testing", token.getAccess());
                                         context.startActivity(homePageIntent);
                                     } catch (JSONException | IOException e) {
                                         throw new RuntimeException(e);
@@ -84,6 +81,45 @@ public class AuthAdapter {
 
                 requestQueue.add(request);
             }
+        }).start();
+    }
+
+    public static void validateEmail(Context context, String email) {
+        new Thread(() -> {
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            RequestFuture<JSONObject> future = RequestFuture.newFuture();
+            JsonObjectRequest request =
+                    new JsonObjectRequest
+                    (
+                        Request.Method.GET,
+                        ServerData.serverURI + "/auth/validate-email/?email=" + email,
+                        null,
+                        future,
+                        error -> {
+                            String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+
+                            try {
+                                JSONObject data = new JSONObject(responseBody);
+                                String message = data.optString("message");
+
+                                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                                Log.d("validate-email", "from validate error" + error.networkResponse.statusCode);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    ) {
+                        @Override
+                        protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                            if (response.statusCode == 200) {
+                                Looper.prepare();
+                                Toast.makeText(context, "Password incorrect", Toast.LENGTH_LONG).show();
+                            }
+                            return super.parseNetworkResponse(response);
+                        }
+                    };
+
+            requestQueue.add(request);
         }).start();
     }
 }
