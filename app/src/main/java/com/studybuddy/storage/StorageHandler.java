@@ -10,13 +10,11 @@ import java.io.OutputStreamWriter;
 
 
 public class StorageHandler {
-    public static void writeToFile(Context context, String[] data, String target) throws IOException {
+    public static void writeToFile(Context context, String data, String target) throws IOException {
         FileOutputStream fileOutputStream = context.openFileOutput(target, Context.MODE_PRIVATE);
         OutputStreamWriter outputWriter = new OutputStreamWriter(fileOutputStream);
 
-        for (String x: data) {
-            outputWriter.write(x);
-        }
+        outputWriter.write(data);
         outputWriter.close();
     }
 

@@ -58,66 +58,50 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(Context context) {
-        ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, String> body = new HashMap<>();
+        body.put("email", email);
+        body.put("password", password);
 
-        new Thread(() -> {
-            HashMap<String, String> body = new HashMap<>();
-            body.put("email", email);
-            body.put("password", password);
-
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
-            RequestFuture<JSONObject> future = RequestFuture.newFuture();
-            JsonObjectRequest request =
-                    new JsonObjectRequest
-                            (
-                                    Request.Method.POST,
-                                    ServerData.serverURI + "/auth/token/",
-                                    new JSONObject(body),
-                                    future,
-                                    error -> {
-                                        ProgressBar progressBar = ((Activity) context).findViewById(R.id.loading);
-                                        progressBar.setVisibility(View.GONE);
-                                        validateEmail(context);
-                                        Log.d("validate-email", String.valueOf(error.networkResponse.statusCode));
-                                    }
-                            ) {
-                        @Override
-                        protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-                            if (response.statusCode == 200) {
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request =
+                new JsonObjectRequest
+                        (
+                            Request.Method.POST,
+                            ServerData.serverURI + "/auth/token/",
+                            new JSONObject(body),
+                            response -> {
                                 Intent homePageIntent = new Intent(context, HomePage.class);
-                                String responseBody = new String(response.data, StandardCharsets.UTF_8);
 
                                 try {
-                                    JSONObject responseData = new JSONObject(responseBody);
-                                    Token token = mapper.readValue(responseData.toString(), Token.class);
-                                    String[] data = {token.getAccess(), token.getRefresh()};
-                                    StorageHandler.writeToFile(context, data, "auth");
+                                    StorageHandler.writeToFile(context, response.toString(), "auth");
                                     context.startActivity(homePageIntent);
-                                } catch (JSONException | IOException e) {
+                                } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
 
+                            },
+                            error -> {
+                                ProgressBar progressBar = ((Activity) context).findViewById(R.id.loading);
+                                progressBar.setVisibility(View.GONE);
+                                validateEmail(context);
+                                Log.d("validate-email", String.valueOf(error.networkResponse.statusCode));
                             }
+                        );
 
-                            return super.parseNetworkResponse(response);
-                        }
-                    };
-
-            requestQueue.add(request);
-        }).start();
+        requestQueue.add(request);
     }
 
     public void validateEmail(Context context) {
-        new Thread(() -> {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
-            RequestFuture<JSONObject> future = RequestFuture.newFuture();
             JsonObjectRequest request =
                     new JsonObjectRequest
                             (
                                     Request.Method.GET,
                                     ServerData.serverURI + "/auth/validate-email/?email=" + email,
                                     null,
-                                    future,
+                                    response -> {
+                                        Toast.makeText(context, "Password incorrect", Toast.LENGTH_LONG).show();
+                                    },
                                     error -> {
                                         String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
 
@@ -140,18 +124,7 @@ public class Login extends AppCompatActivity {
                                             throw new RuntimeException(e);
                                         }
                                     }
-                            ) {
-                        @Override
-                        protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-                            if (response.statusCode == 200) {
-                                Looper.prepare();
-                                Toast.makeText(context, "Password incorrect", Toast.LENGTH_LONG).show();
-                            }
-                            return super.parseNetworkResponse(response);
-                        }
-                    };
-
+                            );
             requestQueue.add(request);
-        }).start();
     }
 }

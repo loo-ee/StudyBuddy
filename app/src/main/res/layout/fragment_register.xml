@@ -31,7 +31,6 @@
             android:layout_marginTop="0dp"
             android:ems="10"
             android:inputType="text"
-            android:text="jann@gmail.com"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_text" />
@@ -54,7 +53,6 @@
             android:layout_marginTop="0dp"
             android:ems="10"
             android:inputType="text"
-            android:text="jann"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/username_text" />
@@ -77,7 +75,6 @@
             android:layout_marginTop="0dp"
             android:ems="10"
             android:inputType="text"
-            android:text="Jann Louie"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/first_name_text" />
@@ -100,7 +97,6 @@
             android:layout_marginTop="0dp"
             android:ems="10"
             android:inputType="text"
-            android:text="Almirante"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/last_name_text" />
@@ -123,10 +119,32 @@
             android:layout_marginTop="0dp"
             android:ems="10"
             android:inputType="textPassword"
-            android:text="password"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_text"
+            />
+
+        <TextView
+            android:id="@+id/password_verify_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Confirm Password"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_field" />
+
+        <EditText
+            android:id="@+id/password_verify_field"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_verify_text"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
