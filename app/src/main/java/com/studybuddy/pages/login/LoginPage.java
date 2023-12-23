@@ -37,8 +37,8 @@ public class LoginPage extends AppCompatActivity {
         setContentView(R.layout.activity_login_page);
         setTitle("Login");
 
-        Intent intent = new Intent(this, MyTasksPage.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, HomePage.class);
+//        startActivity(intent);
     }
 
     public void loginOrRegister(View v) {
