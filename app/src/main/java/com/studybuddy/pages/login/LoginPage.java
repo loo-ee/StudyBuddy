@@ -55,7 +55,7 @@ public class LoginPage extends AppCompatActivity {
         login(this);
     }
 
-    public void login(Context context) {
+    private void login(Context context) {
         HashMap<String, String> body = new HashMap<>();
         body.put("email", email);
         body.put("password", password);
@@ -89,7 +89,7 @@ public class LoginPage extends AppCompatActivity {
         requestQueue.add(request);
     }
 
-    public void validateEmail(Context context) {
+    private void validateEmail(Context context) {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
             JsonObjectRequest request =
                     new JsonObjectRequest

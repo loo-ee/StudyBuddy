@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 
 public class UserTask {
+    @JsonProperty("id")
+    private long id;
+
     @JsonProperty("task")
     private long task;
 
@@ -30,6 +33,14 @@ public class UserTask {
         this.buddy = buddy;
         this.is_done = is_done;
         this.date_finished = date_finished;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getTask() {

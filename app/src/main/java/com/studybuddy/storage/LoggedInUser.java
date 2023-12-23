@@ -12,4 +12,8 @@ public class LoggedInUser {
     public static User getLoggedInUser() {
         return LoggedInUser.loggedInUser;
     }
+
+    public static String getEmail() {
+        return LoggedInUser.loggedInUser.getEmail();
+    }
 }

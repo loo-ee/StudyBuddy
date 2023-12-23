@@ -34,12 +34,12 @@ public class TaskFragment extends Fragment {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         assert params != null;
-        nameTextView.setText(params.getString("name"));
+        nameTextView.setText(params.getString("task"));
         nameTextView.setTextSize(30.f);
         nameTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.cambridge_dark));
         nameTextView.setLayoutParams(layout);
 
-        ageTextView.setText(params.getString("age"));
+        ageTextView.setText(params.getString("buddy"));
         ageTextView.setTextSize(20.f);
         ageTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.cambridge_light));
         ageTextView.setLayoutParams(layout);

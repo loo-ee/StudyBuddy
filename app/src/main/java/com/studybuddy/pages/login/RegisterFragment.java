@@ -1,8 +1,10 @@
 package com.studybuddy.pages.login;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,15 +34,17 @@ import com.android.volley.toolbox.Volley;
 import com.studybuddy.R;
 import com.studybuddy.pages.HomePage;
 import com.studybuddy.storage.ServerData;
+import com.studybuddy.storage.StorageHandler;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
 public class RegisterFragment extends DialogFragment {
-    View view;
+    private View view;
 
     public RegisterFragment() {
         super();
@@ -123,13 +128,43 @@ public class RegisterFragment extends DialogFragment {
                             ServerData.serverURI + "/auth/register/",
                             new JSONObject(body),
                             response -> {
-                                Intent intent = new Intent(view.getContext(), HomePage.class);
-
                                 Toast.makeText(view.getContext(), "Registered Successfully", Toast.LENGTH_LONG).show();
-                                view.getContext().startActivity(intent);
+                                login(view.getContext(), bundle.get("email"), bundle.get("password"));
                             },
                             error -> Toast.makeText(view.getContext(), "Something went wrong.", Toast.LENGTH_LONG).show()
                         );
+        requestQueue.add(request);
+    }
+
+    private void login(Context context, String email, String password) {
+        HashMap<String, String> body = new HashMap<>();
+        body.put("email", email);
+        body.put("password", password);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest request =
+                new JsonObjectRequest
+                        (
+                                Request.Method.POST,
+                                ServerData.serverURI + "/auth/token/",
+                                new JSONObject(body),
+                                response -> {
+                                    Intent homePageIntent = new Intent(context, HomePage.class);
+
+                                    try {
+                                        StorageHandler.writeToFile(context, response.toString(), "auth");
+                                        context.startActivity(homePageIntent);
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+
+                                },
+                                error -> {
+                                    Toast.makeText(view.getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+                                    Log.d("exception_caught", String.valueOf(error.networkResponse.statusCode));
+                                }
+                        );
+
         requestQueue.add(request);
     }
 }
