@@ -16,11 +16,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".pages.HomePage"
-            android:parentActivityName=".pages.login.Login"
-            android:exported="false" />
+            android:name=".pages.my_tasks.MyTasksPage"
+            android:exported="false"
+            android:parentActivityName=".pages.HomePage" />
         <activity
-            android:name=".pages.login.Login"
+            android:name=".pages.HomePage"
+            android:exported="false"
+            android:parentActivityName=".pages.login.LoginPage" />
+        <activity
+            android:name=".pages.login.LoginPage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

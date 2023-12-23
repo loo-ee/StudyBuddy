@@ -5,25 +5,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.android.volley.NetworkResponse;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studybuddy.R;
+import com.studybuddy.pages.my_tasks.MyTasksPage;
 import com.studybuddy.storage.ServerData;
-import com.studybuddy.models.auth.Token;
 import com.studybuddy.pages.HomePage;
 import com.studybuddy.storage.StorageHandler;
 import org.json.JSONException;
@@ -32,15 +27,18 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
-public class Login extends AppCompatActivity {
+public class LoginPage extends AppCompatActivity {
     private String email;
     private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_page);
         setTitle("Login");
+
+        Intent intent = new Intent(this, MyTasksPage.class);
+        startActivity(intent);
     }
 
     public void loginOrRegister(View v) {

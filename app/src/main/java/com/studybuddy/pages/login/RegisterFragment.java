@@ -115,24 +115,20 @@ public class RegisterFragment extends DialogFragment {
         body.put("first_name", bundle.get("firstName"));
         body.put("last_name", bundle.get("lastName"));
 
-        Log.d("exception_caught", "started reg req");
-
         RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
         JsonObjectRequest request =
                 new JsonObjectRequest
                         (
-                                Request.Method.POST,
-                                ServerData.serverURI + "/auth/register/",
-                                new JSONObject(body),
-                                response -> {
-                                    Intent intent = new Intent(view.getContext(), HomePage.class);
+                            Request.Method.POST,
+                            ServerData.serverURI + "/auth/register/",
+                            new JSONObject(body),
+                            response -> {
+                                Intent intent = new Intent(view.getContext(), HomePage.class);
 
-                                    Toast.makeText(view.getContext(), "Registered Successfully", Toast.LENGTH_LONG).show();
-                                    view.getContext().startActivity(intent);
-                                },
-                                error -> {
-                                    Log.d("exception_caught", String.valueOf(error.networkResponse.statusCode));
-                                }
+                                Toast.makeText(view.getContext(), "Registered Successfully", Toast.LENGTH_LONG).show();
+                                view.getContext().startActivity(intent);
+                            },
+                            error -> Toast.makeText(view.getContext(), "Something went wrong.", Toast.LENGTH_LONG).show()
                         );
         requestQueue.add(request);
     }
