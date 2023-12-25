@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.PixelCopy;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -32,7 +30,6 @@ import com.studybuddy.storage.StorageHandler;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +41,7 @@ public class HomePage extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
 
         try {
-            getLoggedInUser(this);
+            getUser(this);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -55,22 +52,13 @@ public class HomePage extends AppCompatActivity {
         view.getContext().startActivity(intent);
     }
 
-    public void getLoggedInUser(Context context) throws IOException {
+    public void getUser(Context context) throws IOException {
+        if (LoggedInUser.getLoggedInUser() != null)
+            return;
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        FileInputStream inputStream = context.openFileInput("auth");
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        StringBuilder stringBuilder = new StringBuilder();
-
-        while ((bytesRead = inputStream.read(buffer)) > 0) {
-            String chunk = new String(buffer, 0, bytesRead);
-            stringBuilder.append(chunk);
-        }
-
-        inputStream.close();
 
         String content = StorageHandler.readFromFile(context, "auth");
         Token token = mapper.readValue(content, Token.class);
@@ -82,7 +70,7 @@ public class HomePage extends AppCompatActivity {
                 new JsonObjectRequest
                         (
                                 Request.Method.GET,
-                                ServerData.serverURI + "/auth/get-logged-in/?user_email=" + userEmail,
+                                ServerData.serverURI + "/auth/get-user/?user_email=" + userEmail,
                                 null,
                                 response -> {
                                     try {
@@ -108,5 +96,14 @@ public class HomePage extends AppCompatActivity {
                 };
 
         requestQueue.add(request);
+    }
+
+    public void logout(View view) throws IOException {
+        String nullToken = "{\"refresh\":\"\",\"access\":\"\"}";
+        StorageHandler.writeToFile(view.getContext(), nullToken, "auth");
+        LoggedInUser.setLoggedInUser(null);
+        Toast.makeText(view.getContext(), "Logged out", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(view.getContext(), LoginPage.class);
+        view.getContext().startActivity(intent);
     }
 }
