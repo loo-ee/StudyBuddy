@@ -10,6 +10,7 @@
     tools:context=".pages.my_tasks.MyTasksPage">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:padding="10dp"
@@ -30,5 +31,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </ScrollView>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Tasks"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.492" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

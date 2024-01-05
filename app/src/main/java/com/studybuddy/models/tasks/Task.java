@@ -4,9 +4,13 @@ import androidx.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Task {
+public class Task implements Serializable {
+    @JsonProperty("id")
+    private long id;
+
     @JsonProperty("title")
     private String title;
 
@@ -22,6 +26,14 @@ public class Task {
         this.title = title;
         this.description = description;
         this.date_created = date_created;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {

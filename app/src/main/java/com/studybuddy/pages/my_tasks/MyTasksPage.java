@@ -1,23 +1,17 @@
 package com.studybuddy.pages.my_tasks;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
 
-import com.android.volley.AuthFailureError;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -29,15 +23,13 @@ import com.studybuddy.models.tasks.UserTask;
 import com.studybuddy.storage.LoggedInUser;
 import com.studybuddy.storage.MyTasksStorage;
 import com.studybuddy.storage.ServerData;
-import com.studybuddy.storage.StorageHandler;
 import com.studybuddy.storage.TokenHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import kotlin.jvm.internal.Lambda;
 
 public class MyTasksPage extends AppCompatActivity {
 
@@ -51,7 +43,6 @@ public class MyTasksPage extends AppCompatActivity {
         } catch (Exception e) {
             Log.d("exception_caught", e.toString());
         }
-
     }
 
     public void getUserTasks(Context context) throws IOException {
@@ -84,7 +75,6 @@ public class MyTasksPage extends AppCompatActivity {
 
                                             taskFragment.setArguments(bundle);
                                             ft.add(linearLayout.getId(), taskFragment, String.valueOf(userTask.getId()));
-
                                         });
 
                                         ft.commit();

@@ -11,9 +11,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,21 +26,17 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.studybuddy.R;
 import com.studybuddy.models.auth.Token;
 import com.studybuddy.models.auth.User;
-import com.studybuddy.pages.my_tasks.MyTasksPage;
-import com.studybuddy.services.AuthService;
 import com.studybuddy.storage.LoggedInUser;
 import com.studybuddy.storage.ServerData;
 import com.studybuddy.pages.HomePage;
 import com.studybuddy.storage.StorageHandler;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class LoginPage extends AppCompatActivity {
     private String email;
@@ -55,14 +48,14 @@ public class LoginPage extends AppCompatActivity {
         setContentView(R.layout.activity_login_page);
         setTitle("Login");
 
-        if (LoggedInUser.getLoggedInUser() == null) {
-            PeriodicWorkRequest refreshTokenWorkRequest = new PeriodicWorkRequest.Builder
-                    (AuthService.class, 15, TimeUnit.MINUTES)
-                    .addTag("refresh-token")
-                    .build();
-
-            WorkManager.getInstance(this).enqueueUniquePeriodicWork("refreshTokenWork", ExistingPeriodicWorkPolicy.KEEP, refreshTokenWorkRequest);
-        }
+//        if (LoggedInUser.getLoggedInUser() == null) {
+//            PeriodicWorkRequest refreshTokenWorkRequest = new PeriodicWorkRequest.Builder
+//                    (AuthService.class, 15, TimeUnit.MINUTES)
+//                    .addTag("refresh-token")
+//                    .build();
+//
+//            WorkManager.getInstance(this).enqueueUniquePeriodicWork("refreshTokenWork", ExistingPeriodicWorkPolicy.KEEP, refreshTokenWorkRequest);
+//        }
 
         try {
             getUser(this);
