@@ -14,4 +14,8 @@
     <color name="celadon_light">#A4D1AD</color>
     <color name="coral">#FF9D79</color>
     <color name="cream">#FFFDD0</color>
+    <color name="lightblue">#2196f3</color>
+    <color name="midblue">#1d83d4</color>
+    <color name="darkblue">#1667b7</color>
+    <color name="mintgreen">#93c493</color>
 </resources>

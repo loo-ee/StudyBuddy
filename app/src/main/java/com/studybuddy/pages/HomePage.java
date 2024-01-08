@@ -28,7 +28,6 @@ import com.studybuddy.storage.LoggedInUser;
 import com.studybuddy.storage.ServerData;
 import com.studybuddy.storage.StorageHandler;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

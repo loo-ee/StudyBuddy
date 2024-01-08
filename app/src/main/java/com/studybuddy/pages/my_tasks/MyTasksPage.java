@@ -53,7 +53,7 @@ public class MyTasksPage extends AppCompatActivity {
                 new JsonArrayRequest
                         (
                                 Request.Method.GET,
-                                ServerData.serverURI + "/tasks/get-user-tasks/?user_email=" + LoggedInUser.getEmail(),
+                                ServerData.serverURI + "/tasks/get-user-own-tasks/?user_email=" + LoggedInUser.getEmail(),
                                 null,
                                 response -> {
                                     try {

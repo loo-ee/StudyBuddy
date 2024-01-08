@@ -13,7 +13,6 @@ public class TokenHandler {
     public static Token getToken(Context context) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String content = StorageHandler.readFromFile(context, tokenPath);
-        Token token = mapper.readValue(content, Token.class);
-        return token;
+        return mapper.readValue(content, Token.class);
     }
 }

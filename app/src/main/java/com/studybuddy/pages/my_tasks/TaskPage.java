@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.studybuddy.R;
@@ -22,6 +24,7 @@ public class TaskPage extends AppCompatActivity {
     private Task task;
     private User buddy;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +38,17 @@ public class TaskPage extends AppCompatActivity {
 
         TextView date = findViewById(R.id.date);
         TextView taskDescription = findViewById(R.id.taskDescription);
+        TextView buddyName = findViewById(R.id.buddy_name);
+        TextView status = findViewById(R.id.status);
 
         taskDescription.setText(this.task.getDescription());
+        buddyName.setText(this.buddy.getFirst_name() + " " + this.buddy.getLast_name());
 
+        String statusText = this.userTask.isIs_done() ? "Completed" : "Pending";
         String parsedDate = DateParser.parseDate(this.task.getDate_created().toString());
+
         date.setText(parsedDate);
+        status.setText(statusText);
     }
 
     @Nullable

@@ -14,7 +14,6 @@ public class StorageHandler {
     public static void writeToFile(Context context, String data, String target) throws IOException {
         FileOutputStream fileOutputStream = context.openFileOutput(target, Context.MODE_PRIVATE);
         OutputStreamWriter outputWriter = new OutputStreamWriter(fileOutputStream);
-        Log.d("refresh-token", data);
 
         outputWriter.write(data);
         outputWriter.close();
