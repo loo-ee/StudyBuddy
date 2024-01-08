@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".pages.my_tasks.TaskPage"
+            android:exported="false" />
+        <activity
             android:name=".pages.my_tasks.MyTasksPage"
             android:exported="false"
             android:parentActivityName=".pages.HomePage" />

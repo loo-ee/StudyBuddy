@@ -4,9 +4,10 @@ import androidx.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class UserTask {
+public class UserTask implements Serializable {
     @JsonProperty("id")
     private long id;
 

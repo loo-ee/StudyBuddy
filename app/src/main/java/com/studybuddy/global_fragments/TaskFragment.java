@@ -32,6 +32,8 @@ import com.studybuddy.R;
 import com.studybuddy.models.auth.Token;
 import com.studybuddy.models.auth.User;
 import com.studybuddy.models.tasks.Task;
+import com.studybuddy.models.tasks.UserTask;
+import com.studybuddy.pages.my_tasks.TaskPage;
 import com.studybuddy.storage.ServerData;
 import com.studybuddy.storage.TokenHandler;
 
@@ -60,21 +62,25 @@ public class TaskFragment extends Fragment {
         this.view = inflater.inflate(R.layout.fragment_task, container, false);
         paramsBundle = getArguments();
 
-        view.setOnClickListener(clicked -> {
-            assert task != null;
-            assert buddy != null;
-            Bundle taskBundle = new Bundle();
-            taskBundle.putSerializable("task", task);
-            taskBundle.putSerializable("buddy", buddy);
-            Toast.makeText(requireContext(), "Still in progress :P", Toast.LENGTH_LONG).show();
-        });
-
         try {
             this.token = TokenHandler.getToken(requireContext());
             getTaskInfo(requireContext());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        view.setOnClickListener(clicked -> {
+            assert task != null;
+            assert buddy != null;
+            Bundle taskBundle = new Bundle();
+            taskBundle.putSerializable("task", task);
+            taskBundle.putSerializable("buddy", buddy);
+            taskBundle.putSerializable("userTask", paramsBundle.getSerializable("userTask"));
+
+            Intent intent = new Intent(requireContext(), TaskPage.class);
+            intent.putExtras(taskBundle);
+            startActivity(intent);
+        });
 
         return this.view;
     }

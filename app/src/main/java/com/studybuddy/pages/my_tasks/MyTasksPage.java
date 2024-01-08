@@ -72,6 +72,7 @@ public class MyTasksPage extends AppCompatActivity {
 
                                             bundle.putString("task", String.valueOf(userTask.getTask()));
                                             bundle.putString("buddy", String.valueOf(userTask.getBuddy()));
+                                            bundle.putSerializable("userTask", userTask);
 
                                             taskFragment.setArguments(bundle);
                                             ft.add(linearLayout.getId(), taskFragment, String.valueOf(userTask.getId()));
